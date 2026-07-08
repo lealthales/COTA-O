@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CotaçãoUltra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0 !important; }
+
+:root {
+  --primary: #262A8A;
+  --primary-dark: #1C2068;
+  --primary-light: #EEF0FB;
+  --ink: #1A1D29;
+  --muted: #6B7280;
+  --line: #D7DAE8;
+  --bg: #F4F5FB;
+  --card: #FFFFFF;
+  --green: #1F7A4D;
+  --green-bg: #E6F4EC;
+  --red: #B91C1C;
+  --red-bg: #FBE9E9;
+  --amber: #B45309;
+  --amber-bg: #FDF1DD;
+}
+
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); font-size: 14px; }
+
+/* ── LOGIN ───────────────────────────────────────────────────────────── */
+#login-screen {
+  position: fixed; inset: 0; background: var(--primary-dark);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.login-box { background: #fff; padding: 44px 40px; width: 100%; max-width: 380px; border-top: 4px solid var(--primary); box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+.login-logo { text-align: center; margin-bottom: 28px; }
+.login-logo img { height: 38px; margin-bottom: 10px; }
+.login-logo p { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+.login-field { margin-bottom: 16px; }
+.login-field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
+.login-field input { width: 100%; padding: 11px 14px; border: 1px solid var(--line); font-size: 14px; font-family: inherit; outline: none; background: #fff; }
+.login-field input:focus { border-color: var(--primary); }
+.login-btn { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; cursor: pointer; font-family: inherit; margin-top: 6px; }
+.login-btn:hover { background: var(--primary-dark); }
+.login-error { background: var(--red-bg); color: var(--red); border-left: 3px solid var(--red); padding: 10px 12px; font-size: 13px; margin-bottom: 16px; display: none; }
+.login-hint { text-align: center; font-size: 12px; color: var(--muted); margin-top: 20px; line-height: 1.6; }
+
+/* ── APP ─────────────────────────────────────────────────────────────── */
+#app { display: none; }
+
+/* Navbar */
+.navbar { background: #fff; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; }
+.navbar-top { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; }
+.navbar-logo { display: flex; align-items: center; gap: 10px; }
+.navbar-logo img { height: 24px; }
+.navbar-logo .divider { width: 1px; height: 22px; background: var(--line); }
+.navbar-logo .product-name { font-size: 14px; font-weight: 700; color: var(--primary); letter-spacing: .01em; }
+.navbar-right { display: flex; align-items: center; gap: 18px; }
+.navbar-user { display: flex; align-items: center; gap: 10px; }
+.navbar-user .av { width: 28px; height: 28px; background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.navbar-user .meta { line-height: 1.25; }
+.navbar-user .name { font-size: 12px; font-weight: 600; }
+.navbar-user .role { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.navbar-user button { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; padding: 6px; }
+.navbar-user button:hover { color: var(--red); }
+
+.navbar-menu { display: flex; align-items: stretch; padding: 0 24px; overflow-x: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 0 16px; height: 42px;
+  color: var(--muted); font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .04em;
+  cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent;
+  white-space: nowrap; font-family: inherit; transition: color .12s, border-color .12s;
+}
+.nav-item:hover { color: var(--primary); }
+.nav-item.active { color: var(--primary); border-bottom-color: var(--primary); }
+.nav-item i { font-size: 12px; }
+
+.main { padding: 28px 32px 60px; max-width: 1320px; margin: 0 auto; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+.topbar h2 { font-size: 19px; font-weight: 700; color: var(--ink); }
+.topbar .sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+.card { background: var(--card); border: 1px solid var(--line); padding: 20px; }
+.card + .card { margin-top: 16px; }
+.card-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: .04em; }
+.card-title i { color: var(--primary); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; }
+input[type=text], input[type=password], input[type=number], textarea, select {
+  width: 100%; padding: 9px 12px; border: 1px solid var(--line);
+  font-family: inherit; font-size: 13px; color: var(--ink);
+  background: #fff; outline: none; transition: border .12s;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--primary); }
+textarea { resize: vertical; line-height: 1.6; }
+
+.btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; border: none; font-family: inherit; transition: all .12s; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-success { background: var(--green); color: #fff; }
+.btn-success:hover { background: #155c39; }
+.btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid #F3C6C6; }
+.btn-danger:hover { background: #F3C6C6; }
+.btn-sm { padding: 6px 12px; font-size: 11px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-red { background: var(--red-bg); color: var(--red); }
+.badge-amber { background: var(--amber-bg); color: var(--amber); }
+.badge-blue { background: var(--primary-light); color: var(--primary); }
+
+/* Indicator cards (dashboard style) */
+.metric { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--primary); padding: 18px 20px; }
+.metric.metric-alert { border-top-color: var(--red); }
+.metric.metric-ok { border-top-color: var(--green); }
+.metric .lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+.metric .val { font-size: 32px; font-weight: 700; color: var(--ink); line-height: 1; }
+.metric.metric-alert .val { color: var(--red); }
+.metric.metric-ok .val { color: var(--green); }
+
+.tabs { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 20px; gap: 4px; }
+.tab-btn { padding: 10px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; border: none; background: none; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 11px 12px; background: var(--bg); font-weight: 700; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--line); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #FAFAFC; }
+td.best { color: var(--green); font-weight: 700; }
+
+.forn-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.forn-row:last-child { border-bottom: none; }
+.avatar { width: 36px; height: 36px; background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.forn-info { flex: 1; min-width: 0; }
+.forn-name { font-weight: 600; font-size: 13px; }
+.forn-email { font-size: 12px; color: var(--muted); }
+
+.item-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: start; margin-bottom: 10px; }
+
+.alert { padding: 12px 14px; font-size: 13px; margin-top: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid; }
+.alert-success { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+.alert-error { background: var(--red-bg); color: var(--red); border-color: var(--red); }
+.alert-info { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+
+.ai-result { background: var(--primary-light); border: 1px solid #D6DAF2; padding: 18px; line-height: 1.7; font-size: 13px; white-space: pre-wrap; color: var(--ink); }
+
+.section { display: none; }
+.section.active { display: block; }
+
+.log-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.log-item:last-child { border-bottom: none; }
+
+.resp-card { border: 1px solid var(--line); margin-bottom: 10px; }
+.resp-header { padding: 13px 16px; background: var(--bg); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.resp-body { padding: 14px 16px; font-size: 13px; line-height: 1.7; white-space: pre-wrap; display: none; border-top: 1px solid var(--line); }
+
+.setor-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 11px; font-weight: 600; border: 1px solid; text-transform: uppercase; letter-spacing: .03em; }
+.lock-note { font-size: 12px; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 14px; background: var(--primary-light); padding: 10px 14px; border-left: 3px solid var(--primary); }
+
+/* Legend (criticality style, like the reference dashboard) */
+.legend { display: flex; gap: 18px; padding: 14px 0 0; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 14px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+.legend-swatch { width: 10px; height: 10px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     TELA DE LOGIN
+═══════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="/static/img/logo-ultrax.png" alt="ultra-x">
+      <p>CotaçãoUltra</p>
+    </div>
+    <div class="login-error" id="login_error"></div>
+    <div class="login-field">
+      <label>Usuário</label>
+      <input type="text" id="login_usuario" placeholder="admin ou nome do setor" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="login_senha" placeholder="********" autocomplete="current-password">
+    </div>
+    <button class="login-btn" onclick="fazerLogin()"><i class="fa fa-right-to-bracket"></i> Entrar</button>
+    <p class="login-hint">Use o usuário <strong>admin</strong> para configurar o sistema, ou o nome do seu setor (ex: <strong>TI</strong>) para fazer cotações.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APLICAÇÃO
+═══════════════════════════════════════ -->
+<div id="app">
+
+<nav class="navbar">
+  <div class="navbar-top">
+    <div class="navbar-logo">
+      <img src="/static/img/logo-ultrax.png" alt="ultra-x">
+      <div class="divider"></div>
+      <span class="product-name">COTAÇÃOULTRA</span>
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-user">
+        <div class="av" id="user_av">A</div>
+        <div class="meta">
+          <div class="name" id="user_name">—</div>
+          <div class="role" id="user_role">—</div>
+        </div>
+        <button onclick="fazerLogout()" title="Sair"><i class="fa fa-right-from-bracket"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="navbar-menu">
+    <button class="nav-item nav-admin-only active" onclick="goTo('configuracao')"><i class="fa fa-gear"></i> Configuração</button>
+    <button class="nav-item nav-admin-only" onclick="goTo('fornecedores')"><i class="fa fa-users"></i> Fornecedores</button>
+    <button class="nav-item" onclick="goTo('nova-cotacao')"><i class="fa fa-plus"></i> Nova Cotação</button>
+    <button class="nav-item" onclick="goTo('disparo')"><i class="fa fa-paper-plane"></i> Disparar E-mails</button>
+    <button class="nav-item" onclick="goTo('respostas')"><i class="fa fa-inbox"></i> Respostas</button>
+    <button class="nav-item" onclick="goTo('analise')"><i class="fa fa-chart-bar"></i> Análise</button>
+    <button class="nav-item" onclick="goTo('historico')"><i class="fa fa-clock-rotate-left"></i> Histórico</button>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- ══════════════════════════════════════
+     CONFIGURAÇÃO (admin apenas)
+═══════════════════════════════════════ -->
+<div class="section active" id="sec-configuracao">
+  <div class="topbar">
+    <div><h2>Configuração do Servidor</h2><p class="sub">Dados de conexão com o servidor Zimbra</p></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><i class="fa fa-server"></i> Servidor Zimbra — SMTP / IMAP</div>
+    <div class="grid-2">
+      <div class="field"><label>Servidor SMTP</label><input type="text" id="smtp_host" placeholder="mail.suaempresa.com.br"></div>
+      <div class="field"><label>Porta SMTP</label><input type="text" id="smtp_port" placeholder="587" value="587"></div>
+      <div class="field"><label>Servidor IMAP</label><input type="text" id="imap_host" placeholder="mail.suaempresa.com.br"></div>
+      <div class="field"><label>Porta IMAP</label><input type="text" id="imap_port" placeholder="993" value="993"></div>
+      <div class="field"><label>E-mail Remetente</label><input type="text" id="cfg_email_user" placeholder="compras@empresa.com.br"></div>
+      <div class="field"><label>Senha</label><input type="password" id="cfg_email_pass" placeholder="********"></div>
+    </div>
+    <div class="field" style="max-width:300px">
+      <label>Segurança</label>
+      <select id="cfg_tls">
+        <option value="starttls">STARTTLS (porta 587)</option>
+        <option value="ssl">SSL/TLS (porta 993)</option>
+        <option value="none">Sem criptografia</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:4px">
+      <button class="btn btn-outline" onclick="testarConexao()"><i class="fa fa-plug"></i> Testar Conexão</button>
+      <button class="btn btn-primary" onclick="salvarConfig()"><i class="fa fa-save"></i> Salvar</button>
+      <span id="cfg_status"></span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><i class="fa fa-key"></i> Chave da API (IA)</div>
+    <div class="field" style="max-width:460px">
+      <label>Anthropic API Key</label>
+      <input type="password" id="cfg_api_key" placeholder="sk-ant-...">
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px">A chave é usada localmente para análise das cotações. Obtenha em <a href="https://console.anthropic.com" target="_blank" style="color:var(--primary)">console.anthropic.com</a></p>
+    <button class="btn btn-outline btn-sm" onclick="salvarAPIKey()"><i class="fa fa-save"></i> Salvar Chave</button>
+    <span id="key_status"></span>
+  </div>
+  <div class="card">
+    <div class="card-title"><i class="fa fa-lock"></i> Senhas de Acesso</div>
+    <div class="grid-2" style="align-items:end">
+      <div class="field"><label>Nova senha do admin</label><input type="password" id="nova_senha_admin" placeholder="********"></div>
+      <div><button class="btn btn-outline btn-sm" onclick="alterarSenhaAdmin()"><i class="fa fa-save"></i> Alterar Senha do Admin</button></div>
+    </div>
+    <p style="font-size:12px;color:var(--muted)">Para alterar a senha de um setor, vá em Fornecedores → Setores.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     FORNECEDORES (admin apenas)
+═══════════════════════════════════════ -->
+<div class="section" id="sec-fornecedores">
+  <div class="topbar">
+    <div><h2>Fornecedores</h2><p class="sub">Organize por setor e cadastre os fornecedores</p></div>
+    <div style="display:flex;gap:8px">
+      <select id="filtro_setor" onchange="renderFornecedores()" style="font-size:13px;padding:8px 12px;border:1px solid var(--line);background:var(--card)">
+        <option value="">Todos os setores</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="fa fa-layer-group"></i> Setores</div>
+    <div id="lista_setores" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="new_setor_nome" placeholder="Novo setor ex: Segurança" style="width:180px">
+      <input type="password" id="new_setor_senha" placeholder="Senha do setor" style="width:160px">
+      <input type="color" id="new_setor_cor" value="#262A8A" style="width:38px;height:38px;padding:2px;border:1px solid var(--line);cursor:pointer">
+      <button class="btn btn-outline btn-sm" onclick="addSetor()"><i class="fa fa-plus"></i> Adicionar Setor</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="fa fa-users"></i> Fornecedores <span id="cnt_forn_label" style="font-weight:400;color:var(--muted);font-size:11px;text-transform:none;letter-spacing:0"></span></div>
+    <div id="lista_fornecedores"><p style="color:var(--muted);font-size:13px">Nenhum fornecedor cadastrado.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="fa fa-plus"></i> Adicionar Fornecedor</div>
+    <div class="grid-3" style="margin-bottom:10px">
+      <div class="field"><label>Empresa</label><input type="text" id="new_nome" placeholder="TechFornece Ltda"></div>
+      <div class="field"><label>E-mail</label><input type="text" id="new_email" placeholder="vendas@empresa.com.br"></div>
+      <div class="field"><label>Contato</label><input type="text" id="new_contato" placeholder="João Silva"></div>
+    </div>
+    <div class="grid-2">
+      <div class="field"><label>Setor</label>
+        <select id="new_setor" style="width:100%"><option value="">Sem setor</option></select>
+      </div>
+      <div class="field"><label>Telefone (opcional)</label><input type="text" id="new_tel" placeholder="(17) 99999-9999"></div>
+    </div>
+    <button class="btn btn-primary" onclick="addFornecedor()"><i class="fa fa-plus"></i> Adicionar</button>
+    <span id="forn_status"></span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     NOVA COTAÇÃO
+═══════════════════════════════════════ -->
+<div class="section" id="sec-nova-cotacao">
+  <div class="topbar">
+    <div><h2>Nova Cotação</h2><p class="sub">Defina os itens a cotar e o modelo do e-mail</p></div>
+  </div>
+  <div class="lock-note" id="setor_lock_note" style="display:none"><i class="fa fa-circle-info"></i> <span></span></div>
+  <div class="card">
+    <div class="card-title"><i class="fa fa-file-alt"></i> Identificação</div>
+    <div class="grid-3">
+      <div class="field"><label>Número da Cotação</label><input type="text" id="num_cot" placeholder="COT-2026-001" value="COT-2026-001"></div>
+      <div class="field"><label>Prazo de Resposta</label><input type="text" id="prazo" placeholder="5 dias úteis" value="5 dias úteis"></div>
+      <div class="field"><label>Departamento Solicitante</label><input type="text" id="departamento" placeholder="TI / Compras"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><i class="fa fa-list"></i> Itens a Cotar</div>
+    <div id="itens_list"></div>
+    <button class="btn btn-outline btn-sm" onclick="addItem()" style="margin-top:8px"><i class="fa fa-plus"></i> Adicionar Item</button>
+  </div>
+  <div class="card">
+    <div class="card-title"><i class="fa fa-envelope"></i> Modelo do E-mail</div>
+    <div class="field">
+      <label>Assunto</label>
+      <input type="text" id="assunto_tpl" value="Solicitação de Cotação – {num_cot} – {empresa}">
+    </div>
+    <div class="field">
+      <label>Corpo <span style="font-weight:400;font-size:11px;color:var(--muted);text-transform:none;letter-spacing:0">variáveis: {contato} {num_cot} {prazo} {remetente} {email_user} {tabela_itens} {empresa}</span></label>
+      <textarea id="corpo_tpl" rows="14">Prezado(a) {contato},
+
+Meu nome é {remetente}, do departamento de compras.
+
+Solicito gentileza em nos enviar cotação para os seguintes itens, com prazo de resposta até {prazo}:
+
+{tabela_itens}
+
+Por favor, informe para cada item:
+- Preço unitário (R$)
+- Prazo de entrega
+- Condições de pagamento
+- Validade da proposta
+
+Número da cotação para referência: {num_cot}
+
+Aguardamos seu retorno.
+
+Atenciosamente,
+{remetente}
+{email_user}</textarea>
+    </div>
+    <button class="btn btn-outline" onclick="previsualizar()"><i class="fa fa-eye"></i> Pré-visualizar</button>
+    <div id="preview_box" style="display:none;margin-top:14px">
+      <p style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Pré-visualização</p>
+      <pre id="preview_text" style="font-size:12px;line-height:1.7;background:var(--bg);padding:16px;border:1px solid var(--line);white-space:pre-wrap;font-family:inherit;color:var(--ink)"></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DISPARO
+═══════════════════════════════════════ -->
+<div class="section" id="sec-disparo">
+  <div class="topbar">
+    <div><h2>Disparar E-mails</h2><p class="sub">Envia a solicitação de cotação para os fornecedores</p></div>
+  </div>
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="metric"><div class="lbl">Fornecedores</div><div class="val" id="d_forn">0</div></div>
+    <div class="metric"><div class="lbl">Itens</div><div class="val" id="d_itens">0</div></div>
+    <div class="metric metric-ok"><div class="lbl">Enviados</div><div class="val" id="d_enviados">—</div></div>
+    <div class="metric metric-alert"><div class="lbl">Erros</div><div class="val" id="d_erros">—</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><i class="fa fa-paper-plane"></i> Disparo</div>
+    <div class="field nav-admin-only" style="max-width:280px;margin-bottom:14px">
+      <label>Filtrar por Setor (opcional)</label>
+      <select id="disparo_setor" style="width:100%" onchange="updateDisparoStats()">
+        <option value="">Todos os setores</option>
+      </select>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Será enviado o modelo configurado em "Nova Cotação" para os fornecedores selecionados.</p>
+    <button class="btn btn-success" id="btn_disparar" onclick="disparar()"><i class="fa fa-paper-plane"></i> Disparar E-mails Agora</button>
+    <div id="disparo_log" style="margin-top:16px"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     RESPOSTAS
+═══════════════════════════════════════ -->
+<div class="section" id="sec-respostas">
+  <div class="topbar">
+    <div><h2>Respostas Recebidas</h2><p class="sub">E-mails de resposta dos fornecedores</p></div>
+    <button class="btn btn-primary" onclick="lerRespostas()"><i class="fa fa-sync"></i> Verificar Caixa de Entrada</button>
+  </div>
+  <div id="respostas_list"><p style="color:var(--muted);font-size:13px">Clique em "Verificar Caixa de Entrada" para buscar respostas.</p></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     ANÁLISE
+═══════════════════════════════════════ -->
+<div class="section" id="sec-analise">
+  <div class="topbar">
+    <div><h2>Análise e Comparação</h2><p class="sub">Comparativo de preços e recomendação de IA</p></div>
+    <button class="btn btn-outline" onclick="exportarExcel()"><i class="fa fa-file-excel"></i> Exportar Excel</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showAnaliseTab('manual')">Entrada Manual</button>
+    <button class="tab-btn" onclick="showAnaliseTab('auto')">A Partir das Respostas</button>
+  </div>
+
+  <div id="analise-manual">
+    <div class="card">
+      <div class="card-title"><i class="fa fa-table"></i> Preços Recebidos por Fornecedor</div>
+      <div id="tabela_entrada"></div>
+      <button class="btn btn-outline btn-sm" onclick="addLinhaForn()" style="margin-top:12px"><i class="fa fa-plus"></i> Adicionar Fornecedor</button>
+    </div>
+    <div class="card">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="analisarManual()"><i class="fa fa-robot"></i> Analisar com IA</button>
+        <button class="btn btn-outline" onclick="gerarTabela()"><i class="fa fa-table"></i> Ver Comparativo</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="analise-auto" style="display:none">
+    <div class="card">
+      <p style="font-size:13px;color:var(--muted)">As respostas recebidas pela caixa de entrada serão enviadas à IA para extração automática de preços.</p>
+      <button class="btn btn-primary" style="margin-top:12px" onclick="analisarAuto()"><i class="fa fa-robot"></i> Analisar Respostas com IA</button>
+    </div>
+  </div>
+
+  <div id="tabela_comparativo" style="margin-top:20px"></div>
+
+  <div id="analise_result_box" style="margin-top:20px;display:none">
+    <div class="card">
+      <div class="card-title"><i class="fa fa-robot"></i> Recomendação da IA</div>
+      <div class="ai-result" id="analise_texto"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     HISTÓRICO
+═══════════════════════════════════════ -->
+<div class="section" id="sec-historico">
+  <div class="topbar">
+    <div><h2>Histórico de Cotações</h2><p class="sub" id="historico_sub">Cotações já disparadas</p></div>
+    <button class="btn btn-outline" onclick="carregarHistorico()"><i class="fa fa-sync"></i> Atualizar</button>
+  </div>
+  <div id="historico_list"><p style="color:var(--muted);font-size:13px">Carregando...</p></div>
+</div>
+
+</main>
+</div>
+
+<script>
+let fornecedores = [];
+let setores = [];
+let itens = [];
+let respostasRecebidas = [];
+let fornAnalise = [];
+let sessaoAtual = null;
+
+async function fazerLogin() {
+  const usuario = document.getElementById('login_usuario').value.trim();
+  const senha = document.getElementById('login_senha').value;
+  const errEl = document.getElementById('login_error');
+  errEl.style.display = 'none';
+  if (!usuario || !senha) { errEl.textContent = 'Informe usuário e senha.'; errEl.style.display = 'block'; return; }
+
+  try {
+    const res = await fetch('/api/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ usuario, senha }) });
+    const data = await res.json();
+    if (!data.ok) { errEl.textContent = data.erro || 'Usuário ou senha incorretos.'; errEl.style.display = 'block'; return; }
+    sessaoAtual = data;
+    iniciarApp();
+  } catch (e) {
+    errEl.textContent = 'Erro ao conectar ao servidor.'; errEl.style.display = 'block';
+  }
+}
+
+document.getElementById('login_senha').addEventListener('keydown', e => { if (e.key === 'Enter') fazerLogin(); });
+document.getElementById('login_usuario').addEventListener('keydown', e => { if (e.key === 'Enter') fazerLogin(); });
+
+async function fazerLogout() {
+  await fetch('/api/logout', { method: 'POST' });
+  location.reload();
+}
+
+function aplicarPermissoes() {
+  const isAdmin = sessaoAtual.tipo === 'admin';
+  document.querySelectorAll('.nav-admin-only').forEach(el => el.style.display = isAdmin ? '' : 'none');
+
+  document.getElementById('user_name').textContent = sessaoAtual.nome;
+  document.getElementById('user_role').textContent = isAdmin ? 'Administrador' : 'Setor';
+  document.getElementById('user_av').textContent = sessaoAtual.nome.slice(0,2).toUpperCase();
+
+  if (!isAdmin) {
+    goToDirect('nova-cotacao');
+    const noteEl = document.getElementById('setor_lock_note');
+    noteEl.style.display = 'flex';
+    noteEl.querySelector('span').textContent = 'Você está logado como o setor "' + sessaoAtual.nome + '". Apenas fornecedores deste setor serão usados.';
+  }
+}
+
+function goToDirect(sec) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + sec).classList.add('active');
+  const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.getAttribute('onclick') === "goTo('" + sec + "')");
+  if (btn) btn.classList.add('active');
+  if (sec === 'fornecedores') renderFornecedores();
+  if (sec === 'disparo') updateDisparoStats();
+  if (sec === 'analise') renderTabelaEntrada();
+  if (sec === 'historico') carregarHistorico();
+}
+
+async function iniciarApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  aplicarPermissoes();
+
+  if (sessaoAtual.tipo === 'admin') {
+    const cfg = await (await fetch('/api/config')).json();
+    if (cfg.smtp_host) {
+      document.getElementById('smtp_host').value = cfg.smtp_host || '';
+      document.getElementById('smtp_port').value = cfg.smtp_port || '587';
+      document.getElementById('imap_host').value = cfg.imap_host || '';
+      document.getElementById('imap_port').value = cfg.imap_port || '993';
+      document.getElementById('cfg_email_user').value = cfg.email_user || '';
+    }
+  }
+  const key = localStorage.getItem('anthropic_key');
+  if (key) { const el = document.getElementById('cfg_api_key'); if (el) el.value = key; }
+
+  fornecedores = await (await fetch('/api/fornecedores')).json();
+  setores = await (await fetch('/api/setores')).json();
+  renderSetores();
+  addItem(); addItem(); addItem();
+}
+
+window.addEventListener('load', async () => {
+  const res = await fetch('/api/sessao');
+  const data = await res.json();
+  if (data.autenticado) {
+    sessaoAtual = { tipo: data.tipo, nome: data.tipo === 'admin' ? 'Administrador' : data.usuario, setor_id: data.setor_id };
+    iniciarApp();
+  }
+});
+
+function goTo(sec) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + sec).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (sec === 'fornecedores') renderFornecedores();
+  if (sec === 'disparo') updateDisparoStats();
+  if (sec === 'analise') renderTabelaEntrada();
+  if (sec === 'historico') carregarHistorico();
+}
+
+async function salvarConfig() {
+  const cfg = {
+    smtp_host: document.getElementById('smtp_host').value,
+    smtp_port: document.getElementById('smtp_port').value,
+    imap_host: document.getElementById('imap_host').value,
+    imap_port: document.getElementById('imap_port').value,
+    email_user: document.getElementById('cfg_email_user').value,
+    email_pass: document.getElementById('cfg_email_pass').value,
+    tls: document.getElementById('cfg_tls').value,
+  };
+  await fetch('/api/config', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(cfg) });
+  document.getElementById('cfg_status').innerHTML = '<span class="badge badge-green"><i class="fa fa-check"></i> Salvo</span>';
+  setTimeout(() => document.getElementById('cfg_status').innerHTML = '', 3000);
+}
+
+function salvarAPIKey() {
+  localStorage.setItem('anthropic_key', document.getElementById('cfg_api_key').value);
+  document.getElementById('key_status').innerHTML = '<span class="badge badge-green"><i class="fa fa-check"></i> Salvo</span>';
+  setTimeout(() => document.getElementById('key_status').innerHTML = '', 3000);
+}
+
+async function alterarSenhaAdmin() {
+  const senha = document.getElementById('nova_senha_admin').value;
+  if (senha.length < 4) { alert('A senha deve ter pelo menos 4 caracteres.'); return; }
+  const res = await fetch('/api/admin/alterar-senha', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ senha }) });
+  const data = await res.json();
+  if (data.ok) { alert('Senha do admin alterada com sucesso.'); document.getElementById('nova_senha_admin').value = ''; }
+  else { alert('Erro: ' + data.erro); }
+}
+
+async function testarConexao() {
+  const cfg = {
+    smtp_host: document.getElementById('smtp_host').value,
+    smtp_port: document.getElementById('smtp_port').value,
+    email_user: document.getElementById('cfg_email_user').value,
+    email_pass: document.getElementById('cfg_email_pass').value,
+  };
+  const el = document.getElementById('cfg_status');
+  el.innerHTML = '<span class="badge badge-blue"><i class="fa fa-spin fa-spinner"></i> Testando...</span>';
+  const res = await fetch('/api/testar-conexao', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(cfg) });
+  const data = await res.json();
+  el.innerHTML = data.ok
+    ? '<span class="badge badge-green"><i class="fa fa-check"></i> Conexão OK!</span>'
+    : '<span class="badge badge-red"><i class="fa fa-times"></i> Erro: ' + data.erro + '</span>';
+}
+
+function renderSetores() {
+  const el = document.getElementById('lista_setores');
+  const filtroEl = document.getElementById('filtro_setor');
+  const newSetorEl = document.getElementById('new_setor');
+  if (!el) return;
+  el.innerHTML = setores.map(s => {
+    let extra = '';
+    if (sessaoAtual.tipo === 'admin') {
+      extra = '<button onclick="trocarSenhaSetor(\'' + s.id + '\',\'' + s.nome + '\')" style="background:none;border:none;cursor:pointer;color:' + s.cor + ';font-size:11px;padding:0;margin-left:2px" title="Alterar senha"><i class="fa fa-key"></i></button>' +
+              '<button onclick="removerSetor(\'' + s.id + '\')" style="background:none;border:none;cursor:pointer;color:' + s.cor + ';font-size:13px;padding:0" title="Remover">×</button>';
+    }
+    return '<div class="setor-pill" style="border-color:' + s.cor + ';color:' + s.cor + '">' +
+      '<span style="width:8px;height:8px;background:' + s.cor + ';flex-shrink:0"></span>' +
+      '<span>' + s.nome + '</span>' + extra +
+      '</div>';
+  }).join('') || '<p style="font-size:12px;color:var(--muted)">Nenhum setor cadastrado.</p>';
+  const opts = setores.map(s => '<option value="' + s.id + '">' + s.nome + '</option>').join('');
+  if (filtroEl) filtroEl.innerHTML = '<option value="">Todos os setores</option>' + opts;
+  if (newSetorEl) newSetorEl.innerHTML = '<option value="">Sem setor</option>' + opts;
+}
+
+async function addSetor() {
+  const nome = document.getElementById('new_setor_nome').value.trim();
+  const senha = document.getElementById('new_setor_senha').value || 'setor123';
+  const cor = document.getElementById('new_setor_cor').value;
+  if (!nome) { alert('Informe o nome do setor.'); return; }
+  await fetch('/api/setores', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ nome, cor, senha }) });
+  setores = await (await fetch('/api/setores')).json();
+  document.getElementById('new_setor_nome').value = '';
+  document.getElementById('new_setor_senha').value = '';
+  renderSetores(); renderFornecedores();
+}
+
+async function removerSetor(id) {
+  if (!confirm('Remover setor? Os fornecedores desse setor ficam sem setor.')) return;
+  await fetch('/api/setores/' + id, { method: 'DELETE' });
+  setores = setores.filter(s => s.id !== id);
+  fornecedores.forEach(f => { if (f.setor === id) f.setor = ''; });
+  renderSetores(); renderFornecedores();
+}
+
+async function trocarSenhaSetor(id, nome) {
+  const nova = prompt('Nova senha para o setor "' + nome + '":');
+  if (!nova) return;
+  if (nova.length < 4) { alert('A senha deve ter pelo menos 4 caracteres.'); return; }
+  const res = await fetch('/api/setores/' + id + '/senha', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ senha: nova }) });
+  const data = await res.json();
+  alert(data.ok ? 'Senha alterada com sucesso.' : 'Erro: ' + data.erro);
+}
+
+function getNomeSetor(id) { const s = setores.find(s => s.id === id); return s ? s.nome : ''; }
+function getCorSetor(id) { const s = setores.find(s => s.id === id); return s ? s.cor : '#888'; }
+
+function getInitials(n) { return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
+
+function renderFornecedores() {
+  const el = document.getElementById('lista_fornecedores');
+  const filtroEl = document.getElementById('filtro_setor');
+  const filtro = filtroEl ? filtroEl.value : '';
+  const lista = filtro ? fornecedores.filter(f => f.setor === filtro) : fornecedores;
+  const lbl = document.getElementById('cnt_forn_label');
+  if (lbl) lbl.textContent = lista.length + ' fornecedor(es)';
+  if (!lista.length) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:13px">' + (filtro ? 'Nenhum fornecedor neste setor.' : 'Nenhum fornecedor cadastrado.') + '</p>';
+    return;
+  }
+  const grupos = {};
+  lista.forEach(f => {
+    const sid = f.setor || '__sem__';
+    if (!grupos[sid]) grupos[sid] = [];
+    grupos[sid].push(f);
+  });
+  el.innerHTML = Object.entries(grupos).map(([sid, items]) => {
+    const label = sid === '__sem__' ? 'Sem setor' : getNomeSetor(sid);
+    const cor = sid === '__sem__' ? '#888' : getCorSetor(sid);
+    const rows = items.map(f => {
+      const gi = fornecedores.indexOf(f);
+      return '<div class="forn-row">' +
+        '<div class="avatar" style="background:' + cor + '1a;color:' + cor + '">' + getInitials(f.nome) + '</div>' +
+        '<div class="forn-info">' +
+          '<div class="forn-name">' + f.nome + '</div>' +
+          '<div class="forn-email">' + f.email + (f.contato ? ' · ' + f.contato : '') + (f.tel ? ' · ' + f.tel : '') + '</div>' +
+        '</div>' +
+        '<button class="btn btn-danger btn-sm" onclick="removerForn(' + gi + ')"><i class="fa fa-trash"></i></button>' +
+      '</div>';
+    }).join('');
+    return '<div style="margin-bottom:16px">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line)">' +
+        '<span style="width:9px;height:9px;background:' + cor + '"></span>' +
+        '<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">' + label + '</span>' +
+        '<span style="font-size:11px;color:var(--muted)">(' + items.length + ')</span>' +
+      '</div>' + rows +
+    '</div>';
+  }).join('');
+}
+
+async function addFornecedor() {
+  const nome = document.getElementById('new_nome').value.trim();
+  const em = document.getElementById('new_email').value.trim();
+  const contato = document.getElementById('new_contato').value.trim();
+  const setor = document.getElementById('new_setor').value;
+  const tel = document.getElementById('new_tel') ? document.getElementById('new_tel').value.trim() : '';
+  if (!nome || !em) { alert('Informe nome e e-mail.'); return; }
+  await fetch('/api/fornecedores', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ nome, email: em, contato, setor, tel }) });
+  fornecedores.push({ nome, email: em, contato, setor, tel });
+  ['new_nome','new_email','new_contato'].forEach(id => document.getElementById(id).value = '');
+  if (document.getElementById('new_tel')) document.getElementById('new_tel').value = '';
+  if (document.getElementById('new_setor')) document.getElementById('new_setor').value = '';
+  renderFornecedores();
+  document.getElementById('forn_status').innerHTML = '<span class="badge badge-green"><i class="fa fa-check"></i> Adicionado</span>';
+  setTimeout(() => document.getElementById('forn_status').innerHTML = '', 2000);
+}
+
+async function removerForn(i) {
+  await fetch('/api/fornecedores/' + i, { method: 'DELETE' });
+  fornecedores.splice(i, 1);
+  renderFornecedores();
+}
+
+function addItem() {
+  itens.push({ produto: '', qtd: '', unidade: 'unidades' });
+  renderItens();
+}
+function renderItens() {
+  document.getElementById('itens_list').innerHTML = itens.map((it, i) => {
+    const unidades = ['unidades','metros','litros','kg','caixas','pares','conjuntos'];
+    const opts = unidades.map(u => '<option ' + (it.unidade===u?'selected':'') + '>' + u + '</option>').join('');
+    return '<div class="item-row">' +
+      '<div><input type="text" placeholder="Nome do produto / serviço" value="' + it.produto + '" oninput="itens[' + i + '].produto=this.value"></div>' +
+      '<div><input type="number" placeholder="Qtd" value="' + it.qtd + '" oninput="itens[' + i + '].qtd=this.value" style="text-align:center"></div>' +
+      '<div><select onchange="itens[' + i + '].unidade=this.value">' + opts + '</select></div>' +
+      '<div><button class="btn btn-danger btn-sm" onclick="removeItem(' + i + ')"><i class="fa fa-times"></i></button></div>' +
+    '</div>';
+  }).join('');
+}
+function removeItem(i) { itens.splice(i, 1); renderItens(); }
+
+function buildEmail(forn) {
+  const numCot = document.getElementById('num_cot').value;
+  const prazo = document.getElementById('prazo').value;
+  const emailUser = (document.getElementById('cfg_email_user') ? document.getElementById('cfg_email_user').value : '') || 'compras@empresa.com.br';
+  const remetente = emailUser.split('@')[0];
+  const tabela = itens.filter(i=>i.produto).map((it,i)=> '  ' + (i+1) + '. ' + it.produto + ' — Qtd: ' + it.qtd + ' ' + it.unidade).join('\n');
+  let corpo = document.getElementById('corpo_tpl').value
+    .replace(/{contato}/g, forn.contato || forn.nome)
+    .replace(/{num_cot}/g, numCot)
+    .replace(/{prazo}/g, prazo)
+    .replace(/{remetente}/g, remetente)
+    .replace(/{email_user}/g, emailUser)
+    .replace(/{tabela_itens}/g, tabela)
+    .replace(/{empresa}/g, forn.nome);
+  const assunto = document.getElementById('assunto_tpl').value
+    .replace(/{num_cot}/g, numCot).replace(/{empresa}/g, forn.nome);
+  return { assunto, corpo };
+}
+
+function previsualizar() {
+  if (!fornecedores.length) { alert('Cadastre ao menos um fornecedor (fale com o administrador).'); return; }
+  const { assunto, corpo } = buildEmail(fornecedores[0]);
+  document.getElementById('preview_text').textContent = 'Para: ' + fornecedores[0].email + '\nAssunto: ' + assunto + '\n\n' + corpo;
+  document.getElementById('preview_box').style.display = 'block';
+}
+
+function updateDisparoStats() {
+  const setorEl = document.getElementById('disparo_setor');
+  const setor = setorEl ? setorEl.value : '';
+  const lista = (sessaoAtual.tipo === 'setor') ? fornecedores : (setor ? fornecedores.filter(f => f.setor === setor) : fornecedores);
+  document.getElementById('d_forn').textContent = lista.length;
+  document.getElementById('d_itens').textContent = itens.filter(i=>i.produto).length;
+  if (setorEl && setorEl.options.length <= 1) {
+    setores.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s.id; o.textContent = s.nome;
+      setorEl.appendChild(o);
+    });
+  }
+}
+
+async function disparar() {
+  if (!fornecedores.length) { alert('Nenhum fornecedor disponível para o seu setor.'); return; }
+  const itensFiltrados = itens.filter(i => i.produto.trim());
+  if (!itensFiltrados.length) { alert('Adicione os itens na aba "Nova Cotação".'); return; }
+  const btn = document.getElementById('btn_disparar');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa fa-spin fa-spinner"></i> Enviando...';
+  const payload = {
+    assunto: document.getElementById('assunto_tpl').value,
+    corpo: document.getElementById('corpo_tpl').value,
+    num_cot: document.getElementById('num_cot').value,
+    prazo: document.getElementById('prazo').value,
+    itens: itensFiltrados,
+    setor: document.getElementById('disparo_setor') ? document.getElementById('disparo_setor').value : ''
+  };
+  const res = await fetch('/api/disparar', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+  const data = await res.json();
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa fa-paper-plane"></i> Disparar E-mails Agora';
+  const log = document.getElementById('disparo_log');
+  if (data.ok) {
+    document.getElementById('d_enviados').textContent = data.enviados.length;
+    document.getElementById('d_erros').textContent = data.erros.length;
+    const okRows = data.enviados.map(e =>
+      '<div class="log-item"><div class="avatar" style="width:30px;height:30px;font-size:11px">' + getInitials(e.nome) + '</div>' +
+      '<div style="flex:1"><strong>' + e.nome + '</strong> &lt;' + e.email + '&gt;</div>' +
+      '<span class="badge badge-green"><i class="fa fa-check"></i> Enviado</span></div>'
+    ).join('');
+    const errRows = data.erros.map(e =>
+      '<div class="log-item"><div style="flex:1"><strong>' + e.nome + '</strong></div>' +
+      '<span class="badge badge-red"><i class="fa fa-times"></i> Erro: ' + e.msg + '</span></div>'
+    ).join('');
+    log.innerHTML = okRows + errRows;
+  } else {
+    log.innerHTML = '<div class="alert alert-error"><i class="fa fa-times-circle"></i> Erro: ' + data.erro + '</div>';
+  }
+}
+
+async function lerRespostas() {
+  const numCot = document.getElementById('num_cot').value;
+  const el = document.getElementById('respostas_list');
+  el.innerHTML = '<p style="color:var(--muted);font-size:13px"><i class="fa fa-spin fa-spinner"></i> Buscando respostas...</p>';
+  const res = await fetch('/api/ler-respostas', {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ num_cot: numCot })
+  });
+  const data = await res.json();
+  if (!data.ok) { el.innerHTML = '<div class="alert alert-error"><i class="fa fa-times-circle"></i> ' + data.erro + '</div>'; return; }
+  respostasRecebidas = data.respostas;
+  if (!data.respostas.length) {
+    el.innerHTML = '<div class="alert alert-info"><i class="fa fa-info-circle"></i> Nenhuma resposta encontrada para ' + numCot + '</div>';
+    return;
+  }
+  el.innerHTML = data.respostas.map((r, i) =>
+    '<div class="resp-card">' +
+      '<div class="resp-header" onclick="toggleResp(' + i + ')">' +
+        '<div><strong style="font-size:13px">' + r.de + '</strong><p style="font-size:12px;color:var(--muted);margin-top:2px">' + r.assunto + '</p></div>' +
+        '<div style="display:flex;align-items:center;gap:10px">' +
+          '<span style="font-size:12px;color:var(--muted)">' + r.data + '</span>' +
+          '<span class="badge badge-green"><i class="fa fa-envelope-open"></i> Recebida</span>' +
+          '<i class="fa fa-chevron-down" id="chev_' + i + '" style="color:var(--muted);font-size:12px"></i>' +
+        '</div>' +
+      '</div>' +
+      '<div class="resp-body" id="resp_body_' + i + '">' + r.corpo + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function toggleResp(i) {
+  const body = document.getElementById('resp_body_' + i);
+  const chev = document.getElementById('chev_' + i);
+  const open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  chev.className = open ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
+}
+
+function showAnaliseTab(t) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('analise-manual').style.display = t === 'manual' ? '' : 'none';
+  document.getElementById('analise-auto').style.display = t === 'auto' ? '' : 'none';
+}
+
+function renderTabelaEntrada() {
+  if (!fornAnalise.length) {
+    fornecedores.forEach(f => fornAnalise.push({ fornecedor: f.nome, precos: {}, prazo: '', pagamento: '' }));
+    if (!fornAnalise.length) fornAnalise.push({ fornecedor: '', precos: {}, prazo: '', pagamento: '' });
+  }
+  const itensFiltrados = itens.filter(i => i.produto.trim());
+  const el = document.getElementById('tabela_entrada');
+  if (!itensFiltrados.length) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:13px">Adicione os itens na aba "Nova Cotação" primeiro.</p>';
+    return;
+  }
+  el.innerHTML = fornAnalise.map((fa, fi) => {
+    const precosInputs = itensFiltrados.map(it =>
+      '<div class="field"><label>' + it.produto + ' (' + it.qtd + ' ' + it.unidade + ')</label>' +
+      '<input type="number" placeholder="0,00" value="' + (fa.precos[it.produto]||'') + '" oninput="fornAnalise[' + fi + '].precos[\'' + it.produto + '\']=parseFloat(this.value)||0"></div>'
+    ).join('');
+    return '<div class="card" style="margin-bottom:12px">' +
+      '<div class="grid-3" style="margin-bottom:10px">' +
+        '<div class="field"><label>Fornecedor</label><input type="text" value="' + fa.fornecedor + '" oninput="fornAnalise[' + fi + '].fornecedor=this.value" placeholder="Nome do fornecedor"></div>' +
+        '<div class="field"><label>Prazo de Entrega</label><input type="text" value="' + fa.prazo + '" oninput="fornAnalise[' + fi + '].prazo=this.value" placeholder="Ex: 5 dias úteis"></div>' +
+        '<div class="field"><label>Condições de Pagamento</label><input type="text" value="' + fa.pagamento + '" oninput="fornAnalise[' + fi + '].pagamento=this.value" placeholder="Ex: 30/60 dias"></div>' +
+      '</div>' +
+      '<p style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Preços (R$)</p>' +
+      '<div class="grid-3">' + precosInputs + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function addLinhaForn() {
+  fornAnalise.push({ fornecedor: '', precos: {}, prazo: '', pagamento: '' });
+  renderTabelaEntrada();
+}
+
+function gerarTabela() {
+  const itensFiltrados = itens.filter(i => i.produto.trim());
+  const el = document.getElementById('tabela_comparativo');
+  const totais = fornAnalise.map(fa => itensFiltrados.reduce((s, it) => s + (fa.precos[it.produto] || 0), 0));
+  const minTotal = Math.min(...totais.filter(t => t > 0));
+  const headerCols = fornAnalise.map(fa => '<th>' + (fa.fornecedor||'—') + '</th>').join('');
+  const bodyRows = itensFiltrados.map(it => {
+    const precos = fornAnalise.map(fa => fa.precos[it.produto] || 0);
+    const minP = Math.min(...precos.filter(p=>p>0));
+    const cells = precos.map(p => '<td class="' + (p===minP&&p>0?'best':'') + '">' + (p ? 'R$ ' + p.toLocaleString('pt-BR', {minimumFractionDigits:2}) : '—') + '</td>').join('');
+    return '<tr><td>' + it.produto + '</td>' + cells + '</tr>';
+  }).join('');
+  const totalCells = totais.map(t =>
+    '<td class="' + (t===minTotal&&t>0?'best':'') + '" style="font-weight:700">' +
+      (t ? 'R$ ' + t.toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—') +
+      (t===minTotal&&t>0 ? '<span class="badge badge-green" style="margin-left:6px">★ Menor</span>' : '') +
+    '</td>'
+  ).join('');
+  const prazoCells = fornAnalise.map(fa => '<td>' + (fa.prazo||'—') + '</td>').join('');
+  const pagtoCells = fornAnalise.map(fa => '<td>' + (fa.pagamento||'—') + '</td>').join('');
+  el.innerHTML = '<div class="card"><div class="card-title"><i class="fa fa-table"></i> Comparativo de Preços</div><div class="tbl-wrap"><table>' +
+    '<thead><tr><th>Item</th>' + headerCols + '</tr></thead>' +
+    '<tbody>' + bodyRows +
+      '<tr style="background:var(--bg)"><td style="font-weight:700">Total</td>' + totalCells + '</tr>' +
+      '<tr><td style="color:var(--muted)">Prazo</td>' + prazoCells + '</tr>' +
+      '<tr><td style="color:var(--muted)">Pagamento</td>' + pagtoCells + '</tr>' +
+    '</tbody></table></div></div>';
+}
+
+async function analisarManual() {
+  gerarTabela();
+  const el = document.getElementById('analise_texto');
+  const box = document.getElementById('analise_result_box');
+  box.style.display = 'block';
+  el.textContent = '⟳ Analisando cotações com IA...';
+  const res = await fetch('/api/analisar', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ itens: itens.filter(i=>i.produto), cotacoes_manuais: fornAnalise })
+  });
+  const data = await res.json();
+  el.textContent = data.ok ? data.analise : 'Erro: ' + data.erro;
+}
+
+async function analisarAuto() {
+  if (!respostasRecebidas.length) { alert('Vá à aba "Respostas" e carregue as respostas primeiro.'); return; }
+  const el = document.getElementById('analise_texto');
+  const box = document.getElementById('analise_result_box');
+  box.style.display = 'block';
+  el.textContent = '⟳ Extraindo preços e analisando...';
+  const res = await fetch('/api/analisar', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ itens: itens.filter(i=>i.produto), respostas: respostasRecebidas })
+  });
+  const data = await res.json();
+  el.textContent = data.ok ? data.analise : 'Erro: ' + data.erro;
+}
+
+async function exportarExcel() {
+  const itensFiltrados = itens.filter(i => i.produto);
+  const analise = document.getElementById('analise_texto').textContent;
+  const res = await fetch('/api/exportar-excel', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      num_cot: document.getElementById('num_cot').value,
+      itens: itensFiltrados,
+      cotacoes: fornAnalise,
+      analise
+    })
+  });
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'cotacao_' + document.getElementById('num_cot').value + '.xlsx';
+  a.click();
+}
+
+async function carregarHistorico() {
+  const el = document.getElementById('historico_list');
+  el.innerHTML = '<p style="color:var(--muted);font-size:13px"><i class="fa fa-spin fa-spinner"></i> Carregando...</p>';
+  const res = await fetch('/api/cotacoes');
+  const data = await res.json();
+  document.getElementById('historico_sub').textContent = sessaoAtual.tipo === 'admin'
+    ? 'Cotações de todos os setores'
+    : 'Cotações do setor ' + sessaoAtual.nome;
+  if (!data.length) { el.innerHTML = '<p style="color:var(--muted);font-size:13px">Nenhuma cotação disparada ainda.</p>'; return; }
+  el.innerHTML = data.map(c =>
+    '<div class="card" style="margin-bottom:12px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">' +
+        '<div><strong style="font-size:14px">' + c.num_cot + '</strong>' +
+        '<p style="font-size:12px;color:var(--muted);margin-top:2px">' + c.data_disparo + (c.criado_por ? ' · por ' + c.criado_por : '') + (c.setor ? ' · setor ' + getNomeSetor(c.setor) : '') + '</p></div>' +
+        '<span class="badge badge-blue">' + c.fornecedores.length + ' fornecedor(es)</span>' +
+      '</div>' +
+      '<p style="font-size:12px;color:var(--muted)">Itens: ' + c.itens.map(i=>i.produto).join(', ') + '</p>' +
+    '</div>'
+  ).join('');
+}
+</script>
+</body>
+</html>
