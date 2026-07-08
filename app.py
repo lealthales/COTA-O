@@ -34,7 +34,6 @@ SETORES_PADRAO = [
 
 ADMIN_PADRAO = {"usuario": "admin", "senha_hash": generate_password_hash("admin123")}
 
-# ── Helpers de persistência ──────────────────────────────────────────────────
 
 def load_json(path, default):
     if os.path.exists(path):
@@ -56,7 +55,7 @@ def setor_publico(s):
     """Remove o hash de senha antes de mandar pro frontend"""
     return {k: v for k, v in s.items() if k != "senha_hash"}
 
-# ── Decorators de proteção de rotas ──────────────────────────────────────────
+
 
 def login_required(f):
     @wraps(f)
@@ -74,7 +73,7 @@ def admin_required(f):
         return f(*args, **kwargs)
     return wrapper
 
-# ── Autenticação ──────────────────────────────────────────────────────────
+
 
 @app.route("/api/login", methods=["POST"])
 def login():
@@ -138,7 +137,6 @@ def alterar_senha_setor(sid):
     save_json(SETORES_FILE, lista)
     return jsonify({"ok": True})
 
-# ── Rotas principais ─────────────────────────────────────────────────────────
 
 @app.route("/")
 def index():
@@ -178,7 +176,7 @@ def del_setor(sid):
     lista = get_setores()
     lista = [s for s in lista if s["id"] != sid]
     save_json(SETORES_FILE, lista)
-    # remover setor dos fornecedores
+
     fornecs = load_json(FORNECEDORES_FILE, [])
     for f in fornecs:
         if f.get("setor") == sid:
@@ -210,7 +208,6 @@ def del_fornecedor(idx):
         save_json(FORNECEDORES_FILE, lista)
     return jsonify({"ok": True})
 
-# ── Disparo de e-mails ───────────────────────────────────────────────────────
 
 @app.route("/api/disparar", methods=["POST"])
 @login_required
@@ -273,7 +270,7 @@ def disparar():
 
         smtp.quit()
 
-        # Registrar cotação no arquivo
+       
         cotacoes = load_json(COTACOES_FILE, [])
         cotacoes.append({
             "num_cot": num_cot,
@@ -291,7 +288,6 @@ def disparar():
 
     return jsonify({"ok": True, "enviados": resultados, "erros": erros})
 
-# ── Leitura de respostas via IMAP ────────────────────────────────────────────
 
 @app.route("/api/ler-respostas", methods=["POST"])
 @login_required
@@ -343,7 +339,7 @@ def ler_respostas():
     except Exception as e:
         return jsonify({"ok": False, "erro": str(e)}), 500
 
-# ── Análise com IA ───────────────────────────────────────────────────────────
+
 
 @app.route("/api/analisar", methods=["POST"])
 @login_required
@@ -397,7 +393,7 @@ Recomende o melhor fornecedor com justificativa de custo-benefício. Máximo 200
     except Exception as e:
         return jsonify({"ok": False, "erro": str(e)}), 500
 
-# ── Exportar Excel ───────────────────────────────────────────────────────────
+
 
 @app.route("/api/exportar-excel", methods=["POST"])
 @login_required
@@ -412,7 +408,7 @@ def exportar_excel():
     ws = wb.active
     ws.title = "Cotação"
 
-    # Estilos
+    
     header_fill = PatternFill("solid", fgColor="1E3A5F")
     header_font = Font(color="FFFFFF", bold=True, size=11)
     best_fill = PatternFill("solid", fgColor="D4EDDA")
@@ -422,7 +418,7 @@ def exportar_excel():
         top=Side(style="thin"), bottom=Side(style="thin")
     )
 
-    # Título
+
     ws.merge_cells("A1:G1")
     ws["A1"] = f"COTAÇÃO {num_cot} — {datetime.now().strftime('%d/%m/%Y')}"
     ws["A1"].font = title_font
@@ -430,7 +426,7 @@ def exportar_excel():
 
     ws.append([])
 
-    # Cabeçalho de itens
+    
     ws.append(["#", "Produto", "Qtd", "Unidade"])
     for cell in ws[ws.max_row]:
         cell.fill = header_fill
@@ -444,7 +440,6 @@ def exportar_excel():
     ws.append([])
     ws.append([])
 
-    # Tabela comparativa
     fornecs = [c["fornecedor"] for c in cotacoes]
     header_row = ["Item"] + fornecs
     ws.append(header_row)
@@ -462,7 +457,7 @@ def exportar_excel():
             precos.append(preco)
             row.append(f"R$ {preco:,.2f}" if preco else "—")
         ws.append(row)
-        # destacar menor preço
+       
         min_p = min((p for p in precos if p), default=0)
         row_num = ws.max_row
         for col_idx, preco in enumerate(precos, 2):
@@ -473,7 +468,7 @@ def exportar_excel():
                 cell.font = Font(bold=True, color="155724")
         ws.cell(row=row_num, column=1).border = border
 
-    # Linha de totais
+    
     ws.append(["TOTAL"] + [
         f"R$ {sum(c['precos'].get(it['produto'], 0) for it in itens):,.2f}"
         for c in cotacoes
@@ -486,7 +481,7 @@ def exportar_excel():
     ws.append(["PRAZO DE ENTREGA"] + [c.get("prazo", "—") for c in cotacoes])
     ws.append(["CONDIÇÕES DE PAGAMENTO"] + [c.get("pagamento", "—") for c in cotacoes])
 
-    # Aba de análise IA
+    
     if analise:
         ws2 = wb.create_sheet("Análise IA")
         ws2["A1"] = "ANÁLISE E RECOMENDAÇÃO — IA"
@@ -497,7 +492,7 @@ def exportar_excel():
             ws2.cell(row=i, column=1, value=linha)
         ws2.column_dimensions["A"].width = 90
 
-    # Ajuste de colunas
+ 
     for col in ws.columns:
         max_len = max((len(str(cell.value or "")) for cell in col), default=0)
         ws.column_dimensions[col[0].column_letter].width = min(max_len + 4, 40)
@@ -514,7 +509,6 @@ def listar_cotacoes():
         cotacoes = [c for c in cotacoes if c.get("setor") == session.get("setor_id")]
     return jsonify(list(reversed(cotacoes)))
 
-# ── Teste de conexão SMTP ────────────────────────────────────────────────────
 
 @app.route("/api/testar-conexao", methods=["POST"])
 @admin_required
