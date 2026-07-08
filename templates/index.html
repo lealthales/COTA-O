@@ -29,7 +29,7 @@
 
 body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); font-size: 14px; }
 
-/* ── LOGIN ───────────────────────────────────────────────────────────── */
+
 #login-screen {
   position: fixed; inset: 0; background: var(--primary-dark);
   display: flex; align-items: center; justify-content: center; z-index: 1000;
@@ -47,10 +47,10 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink
 .login-error { background: var(--red-bg); color: var(--red); border-left: 3px solid var(--red); padding: 10px 12px; font-size: 13px; margin-bottom: 16px; display: none; }
 .login-hint { text-align: center; font-size: 12px; color: var(--muted); margin-top: 20px; line-height: 1.6; }
 
-/* ── APP ─────────────────────────────────────────────────────────────── */
+
 #app { display: none; }
 
-/* Navbar */
+
 .navbar { background: #fff; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; }
 .navbar-top { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; }
 .navbar-logo { display: flex; align-items: center; gap: 10px; }
@@ -122,7 +122,6 @@ textarea { resize: vertical; line-height: 1.6; }
 .badge-amber { background: var(--amber-bg); color: var(--amber); }
 .badge-blue { background: var(--primary-light); color: var(--primary); }
 
-/* Indicator cards (dashboard style) */
 .metric { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--primary); padding: 18px 20px; }
 .metric.metric-alert { border-top-color: var(--red); }
 .metric.metric-ok { border-top-color: var(--green); }
@@ -180,9 +179,7 @@ td.best { color: var(--green); font-weight: 700; }
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     TELA DE LOGIN
-═══════════════════════════════════════ -->
+
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
@@ -203,9 +200,7 @@ td.best { color: var(--green); font-weight: 700; }
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     APLICAÇÃO
-═══════════════════════════════════════ -->
+
 <div id="app">
 
 <nav class="navbar">
@@ -239,9 +234,6 @@ td.best { color: var(--green); font-weight: 700; }
 
 <main class="main">
 
-<!-- ══════════════════════════════════════
-     CONFIGURAÇÃO (admin apenas)
-═══════════════════════════════════════ -->
 <div class="section active" id="sec-configuracao">
   <div class="topbar">
     <div><h2>Configuração do Servidor</h2><p class="sub">Dados de conexão com o servidor Zimbra</p></div>
@@ -290,9 +282,6 @@ td.best { color: var(--green); font-weight: 700; }
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     FORNECEDORES (admin apenas)
-═══════════════════════════════════════ -->
 <div class="section" id="sec-fornecedores">
   <div class="topbar">
     <div><h2>Fornecedores</h2><p class="sub">Organize por setor e cadastre os fornecedores</p></div>
@@ -337,9 +326,6 @@ td.best { color: var(--green); font-weight: 700; }
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     NOVA COTAÇÃO
-═══════════════════════════════════════ -->
 <div class="section" id="sec-nova-cotacao">
   <div class="topbar">
     <div><h2>Nova Cotação</h2><p class="sub">Defina os itens a cotar e o modelo do e-mail</p></div>
@@ -396,9 +382,7 @@ Atenciosamente,
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     DISPARO
-═══════════════════════════════════════ -->
+
 <div class="section" id="sec-disparo">
   <div class="topbar">
     <div><h2>Disparar E-mails</h2><p class="sub">Envia a solicitação de cotação para os fornecedores</p></div>
@@ -423,9 +407,6 @@ Atenciosamente,
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     RESPOSTAS
-═══════════════════════════════════════ -->
 <div class="section" id="sec-respostas">
   <div class="topbar">
     <div><h2>Respostas Recebidas</h2><p class="sub">E-mails de resposta dos fornecedores</p></div>
@@ -434,9 +415,7 @@ Atenciosamente,
   <div id="respostas_list"><p style="color:var(--muted);font-size:13px">Clique em "Verificar Caixa de Entrada" para buscar respostas.</p></div>
 </div>
 
-<!-- ══════════════════════════════════════
-     ANÁLISE
-═══════════════════════════════════════ -->
+
 <div class="section" id="sec-analise">
   <div class="topbar">
     <div><h2>Análise e Comparação</h2><p class="sub">Comparativo de preços e recomendação de IA</p></div>
@@ -479,9 +458,7 @@ Atenciosamente,
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     HISTÓRICO
-═══════════════════════════════════════ -->
+
 <div class="section" id="sec-historico">
   <div class="topbar">
     <div><h2>Histórico de Cotações</h2><p class="sub" id="historico_sub">Cotações já disparadas</p></div>
